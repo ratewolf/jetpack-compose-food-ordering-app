@@ -684,7 +684,7 @@ private fun SplashScreen(store: LocalStore, onFinished: (Boolean) -> Unit) {
             Spacer(modifier = Modifier.height(18.dp))
             Text("Foodies", color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(6.dp))
-            Text("Welcome to your modern food ordering flow", color = Color.White.copy(alpha = 0.85f), style = MaterialTheme.typography.bodyMedium)
+            Text("현대적인 음식 주문 서비스를 경험해보세요", color = Color.White.copy(alpha = 0.85f), style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(30.dp))
             CircularProgressIndicator(color = PrimaryYellow, trackColor = Color.White.copy(alpha = 0.2f))
         }
@@ -707,7 +707,7 @@ private fun LoginScreen(store: LocalStore, onLoginSuccess: () -> Unit, onSignupC
         Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
             AuthHero()
             Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp)) {
-                Text("Sign In", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.CenterHorizontally))
+                Text("로그인", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.CenterHorizontally))
                 Spacer(modifier = Modifier.height(24.dp))
                 OutlinedTextField(
                     value = email,
@@ -715,7 +715,7 @@ private fun LoginScreen(store: LocalStore, onLoginSuccess: () -> Unit, onSignupC
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = RoundedCornerShape(18.dp),
-                    label = { Text("Email or Username") },
+                    label = { Text("이메일 또는 사용자 이름") },
                     leadingIcon = { Icon(Icons.Outlined.MailOutline, contentDescription = null) },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -725,7 +725,7 @@ private fun LoginScreen(store: LocalStore, onLoginSuccess: () -> Unit, onSignupC
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = RoundedCornerShape(18.dp),
-                    label = { Text("Password") },
+                    label = { Text("비밀번호") },
                     leadingIcon = { Icon(Icons.Outlined.Lock, contentDescription = null) },
                     trailingIcon = {
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
@@ -742,8 +742,8 @@ private fun LoginScreen(store: LocalStore, onLoginSuccess: () -> Unit, onSignupC
                 Button(
                     onClick = {
                         when {
-                            !email.contains("@") -> errorMessage = "Please enter a valid email address."
-                            password.length < 4 -> errorMessage = "Password must be at least 4 characters."
+                            !email.contains("@") -> errorMessage = "유효한 이메일 주소를 입력해주세요."
+                            password.length < 4 -> errorMessage = "비밀번호는 최소 4자 이상이어야 합니다."
                             else -> scope.launch {
                                 val formattedName = email.substringBefore("@").replaceFirstChar { char ->
                                     if (char.isLowerCase()) char.titlecase() else char.toString()
@@ -756,11 +756,11 @@ private fun LoginScreen(store: LocalStore, onLoginSuccess: () -> Unit, onSignupC
                     modifier = Modifier.fillMaxWidth().height(58.dp),
                     shape = RoundedCornerShape(18.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = PrimaryYellow, contentColor = Color.Black),
-                ) { Text("Sign In", fontWeight = FontWeight.Bold) }
+                ) { Text("로그인", fontWeight = FontWeight.Bold) }
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                    Text("Don't have an account? ")
-                    Text("Sign Up", color = PrimaryYellow, fontWeight = FontWeight.SemiBold, modifier = Modifier.clickable(onClick = onSignupClick))
+                    Text("계정이 없으신가요? ")
+                    Text("회원가입", color = PrimaryYellow, fontWeight = FontWeight.SemiBold, modifier = Modifier.clickable(onClick = onSignupClick))
                 }
             }
         }
@@ -787,19 +787,19 @@ private fun SignupScreen(store: LocalStore, onSignupSuccess: () -> Unit, onBack:
                 IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = null) }
             }
             Column(modifier = Modifier.padding(horizontal = 24.dp)) {
-                Text("Create Account", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                Text("계정 생성", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("Enter your details here to continue with Foodies.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Foodies를 이용하시려면 정보를 입력해주세요.", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Spacer(modifier = Modifier.height(24.dp))
-                OutlinedTextField(fullName, { fullName = it; errorMessage = null }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, label = { Text("Full Name") }, leadingIcon = { Icon(Icons.Outlined.PersonOutline, null) })
+                OutlinedTextField(fullName, { fullName = it; errorMessage = null }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, label = { Text("이름") }, leadingIcon = { Icon(Icons.Outlined.PersonOutline, null) })
                 Spacer(modifier = Modifier.height(14.dp))
-                OutlinedTextField(email, { email = it; errorMessage = null }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, label = { Text("Email") }, leadingIcon = { Icon(Icons.Outlined.MailOutline, null) })
+                OutlinedTextField(email, { email = it; errorMessage = null }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, label = { Text("이메일") }, leadingIcon = { Icon(Icons.Outlined.MailOutline, null) })
                 Spacer(modifier = Modifier.height(14.dp))
-                OutlinedTextField(phone, { phone = it; errorMessage = null }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, label = { Text("Phone") }, leadingIcon = { Icon(Icons.Outlined.Phone, null) })
+                OutlinedTextField(phone, { phone = it; errorMessage = null }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, label = { Text("전화번호") }, leadingIcon = { Icon(Icons.Outlined.Phone, null) })
                 Spacer(modifier = Modifier.height(14.dp))
-                OutlinedTextField(password, { password = it; errorMessage = null }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, label = { Text("Password") }, leadingIcon = { Icon(Icons.Outlined.Lock, null) }, visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation())
+                OutlinedTextField(password, { password = it; errorMessage = null }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, label = { Text("비밀번호") }, leadingIcon = { Icon(Icons.Outlined.Lock, null) }, visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation())
                 Spacer(modifier = Modifier.height(14.dp))
-                OutlinedTextField(confirmPassword, { confirmPassword = it; errorMessage = null }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, label = { Text("Confirm Password") }, leadingIcon = { Icon(Icons.Outlined.Lock, null) }, trailingIcon = { IconButton(onClick = { passwordVisible = !passwordVisible }) { Icon(if (passwordVisible) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility, null) } }, visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation())
+                OutlinedTextField(confirmPassword, { confirmPassword = it; errorMessage = null }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), singleLine = true, label = { Text("비밀번호 확인") }, leadingIcon = { Icon(Icons.Outlined.Lock, null) }, trailingIcon = { IconButton(onClick = { passwordVisible = !passwordVisible }) { Icon(if (passwordVisible) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility, null) } }, visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation())
                 errorMessage?.let {
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(it, color = MaterialTheme.colorScheme.error)
@@ -808,18 +808,18 @@ private fun SignupScreen(store: LocalStore, onSignupSuccess: () -> Unit, onBack:
                 Button(
                     onClick = {
                         when {
-                            fullName.isBlank() -> errorMessage = "Please enter your name."
-                            !email.contains("@") -> errorMessage = "Please enter a valid email address."
-                            phone.length < 8 -> errorMessage = "Please enter a valid phone number."
-                            password.length < 4 -> errorMessage = "Password must be at least 4 characters."
-                            password != confirmPassword -> errorMessage = "Passwords do not match."
+                            fullName.isBlank() -> errorMessage = "이름을 입력해주세요."
+                            !email.contains("@") -> errorMessage = "유효한 이메일 주소를 입력해주세요."
+                            phone.length < 8 -> errorMessage = "유효한 전화번호를 입력해주세요."
+                            password.length < 4 -> errorMessage = "비밀번호는 최소 4자 이상이어야 합니다."
+                            password != confirmPassword -> errorMessage = "비밀번호가 일치하지 않습니다."
                             else -> scope.launch { store.saveSession(fullName, email); onSignupSuccess() }
                         }
                     },
                     modifier = Modifier.fillMaxWidth().height(56.dp),
                     shape = RoundedCornerShape(18.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = PrimaryYellow, contentColor = Color.Black),
-                ) { Text("Sign Up", fontWeight = FontWeight.Bold) }
+                ) { Text("회원가입", fontWeight = FontWeight.Bold) }
             }
         }
     }
@@ -865,10 +865,10 @@ private fun MainShell(
         },
         bottomBar = {
             NavigationBar {
-                NavigationBarItem(selected = currentTab == MainTab.Menu, onClick = { currentTab = MainTab.Menu }, icon = { Icon(Icons.Outlined.RestaurantMenu, null) }, label = { Text("Menu") })
-                NavigationBarItem(selected = currentTab == MainTab.Orders, onClick = { currentTab = MainTab.Orders }, icon = { Icon(Icons.Outlined.ReceiptLong, null) }, label = { Text("Orders") })
-                NavigationBarItem(selected = currentTab == MainTab.Favorites, onClick = { currentTab = MainTab.Favorites }, icon = { Icon(Icons.Outlined.FavoriteBorder, null) }, label = { Text("Saved") })
-                NavigationBarItem(selected = currentTab == MainTab.Profile, onClick = { currentTab = MainTab.Profile }, icon = { Icon(Icons.Outlined.PersonOutline, null) }, label = { Text("Profile") })
+                NavigationBarItem(selected = currentTab == MainTab.Menu, onClick = { currentTab = MainTab.Menu }, icon = { Icon(Icons.Outlined.RestaurantMenu, null) }, label = { Text("메뉴") })
+                NavigationBarItem(selected = currentTab == MainTab.Orders, onClick = { currentTab = MainTab.Orders }, icon = { Icon(Icons.Outlined.ReceiptLong, null) }, label = { Text("주문") })
+                NavigationBarItem(selected = currentTab == MainTab.Favorites, onClick = { currentTab = MainTab.Favorites }, icon = { Icon(Icons.Outlined.FavoriteBorder, null) }, label = { Text("찜") })
+                NavigationBarItem(selected = currentTab == MainTab.Profile, onClick = { currentTab = MainTab.Profile }, icon = { Icon(Icons.Outlined.PersonOutline, null) }, label = { Text("프로필") })
             }
         },
     ) { innerPadding ->
@@ -903,7 +903,7 @@ private fun MenuScreen(homeViewModel: HomeViewModel, onOpenDetail: (Int) -> Unit
                     Text("Foodies", color = Color.White, fontWeight = FontWeight.Bold)
                 }
                 Spacer(modifier = Modifier.height(14.dp))
-                FoodiesSearchField(value = uiState.query, onValueChange = homeViewModel::onQueryChanged, placeholder = "Search...")
+                FoodiesSearchField(value = uiState.query, onValueChange = homeViewModel::onQueryChanged, placeholder = "검색...")
             }
         }
         item {
@@ -917,19 +917,19 @@ private fun MenuScreen(homeViewModel: HomeViewModel, onOpenDetail: (Int) -> Unit
                     }
                     Row(modifier = Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         uiState.tags.forEach { tag ->
-                            TagPill(text = tag, selected = tag == uiState.selectedTag) { homeViewModel.onTagSelected(tag) }
+                            TagPill(text = if (tag == "All") "전체" else tag, selected = tag == uiState.selectedTag) { homeViewModel.onTagSelected(tag) }
                             Spacer(modifier = Modifier.width(8.dp))
                         }
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     if (uiState.query.isBlank() && uiState.selectedTag == "All") {
-                        SectionHeader("Trending now")
+                        SectionHeader("인기 급상승")
                         Spacer(modifier = Modifier.height(14.dp))
                         FeaturedGrid(uiState.featuredRecipes, onOpenDetail)
                         Spacer(modifier = Modifier.height(22.dp))
                         PromoCard(uiState.deals.firstOrNull(), onOpenDetail)
                         Spacer(modifier = Modifier.height(24.dp))
-                        SectionHeader("Deals")
+                        SectionHeader("오늘의 할인")
                         Spacer(modifier = Modifier.height(14.dp))
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             items(uiState.deals) { recipe ->
@@ -937,7 +937,7 @@ private fun MenuScreen(homeViewModel: HomeViewModel, onOpenDetail: (Int) -> Unit
                             }
                         }
                         Spacer(modifier = Modifier.height(24.dp))
-                        SectionHeader("Explore more")
+                        SectionHeader("더 보기")
                         Spacer(modifier = Modifier.height(14.dp))
                         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
                             uiState.exploreMore.forEach { recipe ->
@@ -945,7 +945,7 @@ private fun MenuScreen(homeViewModel: HomeViewModel, onOpenDetail: (Int) -> Unit
                             }
                         }
                     } else {
-                        SectionHeader(if (uiState.query.isBlank()) uiState.selectedTag else "Search results")
+                        SectionHeader(if (uiState.query.isBlank()) (if (uiState.selectedTag == "All") "전체" else uiState.selectedTag) else "검색 결과")
                         Spacer(modifier = Modifier.height(14.dp))
                         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
                             uiState.recipes.forEach { recipe ->
@@ -1051,7 +1051,7 @@ private fun ErrorMessageCard(message: String, onRetry: () -> Unit) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(message, color = MaterialTheme.colorScheme.onErrorContainer, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.height(8.dp))
-            Text("Tap to retry", color = MaterialTheme.colorScheme.onErrorContainer, modifier = Modifier.clickable(onClick = onRetry))
+            Text("다시 시도하려면 탭하세요", color = MaterialTheme.colorScheme.onErrorContainer, modifier = Modifier.clickable(onClick = onRetry))
         }
     }
 }
@@ -1074,7 +1074,7 @@ private fun DetailScreen(recipeId: Int, homeViewModel: HomeViewModel, onBack: ()
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(recipe?.name ?: "Food details") },
+                title = { Text(recipe?.name ?: "상세 정보") },
                 navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } },
                 actions = {
                     IconButton(onClick = { if (recipe != null) scope.launch { store.toggleFavorite(recipe.id) } }) {
@@ -1100,7 +1100,7 @@ private fun DetailScreen(recipeId: Int, homeViewModel: HomeViewModel, onBack: ()
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text("$${String.format("%.2f", calculateTotal(it, selectedSize, quantity, selectedExtras.size))}", fontWeight = FontWeight.Bold, fontSize = 22.sp)
-                        SmallMetaText("Quantity $quantity")
+                        SmallMetaText("수량 $quantity")
                     }
                     Button(
                         onClick = {
@@ -1128,7 +1128,7 @@ private fun DetailScreen(recipeId: Int, homeViewModel: HomeViewModel, onBack: ()
                     ) {
                         Icon(Icons.Rounded.ShoppingCart, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Add to cart", fontWeight = FontWeight.Bold)
+                        Text("장바구니 담기", fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -1155,24 +1155,24 @@ private fun DetailScreen(recipeId: Int, homeViewModel: HomeViewModel, onBack: ()
                             TimeChip(recipe.etaLabel)
                         }
                         Text(recipe.ingredients.take(5).joinToString(), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        SectionHeader("Variation")
+                        SectionHeader("사이즈 선택")
                         SIZE_OPTIONS.forEach { option ->
                             SelectableRow(option, "$${String.format("%.2f", basePriceFor(recipe, option))}", selectedSize == option) { selectedSize = option }
                         }
-                        SectionHeader("Quantity")
+                        SectionHeader("수량")
                         QuantitySelector(quantity, onMinus = { if (quantity > 1) quantity-- }, onPlus = { quantity++ })
-                        SectionHeader("Extra Sauce")
+                        SectionHeader("소스 추가")
                         EXTRA_OPTIONS.forEach { extra ->
                             ExtraRow(extra, if (extra.contains("Texas")) "$6" else "$8", selectedExtras.contains(extra)) {
                                 if (selectedExtras.contains(extra)) selectedExtras.remove(extra) else selectedExtras.add(extra)
                             }
                         }
-                        SectionHeader("Instructions")
-                        OutlinedTextField(value = note, onValueChange = { note = it }, modifier = Modifier.fillMaxWidth(), minLines = 4, shape = RoundedCornerShape(18.dp), placeholder = { Text("e.g. less spices, no mayo etc") })
-                        SectionHeader("If the product is not available")
+                        SectionHeader("요청 사항")
+                        OutlinedTextField(value = note, onValueChange = { note = it }, modifier = Modifier.fillMaxWidth(), minLines = 4, shape = RoundedCornerShape(18.dp), placeholder = { Text("예: 마요네즈 빼주세요, 덜 맵게 등") })
+                        SectionHeader("품절 시 선택")
                         Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)) {
                             Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                                Text("Remove it from my order")
+                                Text("주문에서 제외")
                                 Icon(Icons.Rounded.CheckCircle, contentDescription = null, tint = PrimaryYellow)
                             }
                         }
@@ -1249,15 +1249,15 @@ private fun CartScreen(homeViewModel: HomeViewModel, onBack: () -> Unit, onOpenD
     val subtotal = cartItems.sumOf { it.price * it.quantity }
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text("Cart") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } })
+        TopAppBar(title = { Text("장바구니") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } })
     }) { innerPadding ->
         if (cartItems.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(Icons.Outlined.ShoppingBag, contentDescription = null, modifier = Modifier.size(64.dp), tint = PrimaryYellow)
                     Spacer(modifier = Modifier.height(14.dp))
-                    Text("Your cart is empty", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                    SmallMetaText("Add a few menu items and come back here.")
+                    Text("장바구니가 비어 있습니다", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    SmallMetaText("메뉴를 추가한 후 다시 확인해주세요.")
                 }
             }
         } else {
@@ -1267,7 +1267,7 @@ private fun CartScreen(homeViewModel: HomeViewModel, onBack: () -> Unit, onOpenD
                 }
                 item {
                     Spacer(modifier = Modifier.height(8.dp))
-                    SectionHeader("Popular with these")
+                    SectionHeader("함께 많이 주문하는 메뉴")
                     Spacer(modifier = Modifier.height(12.dp))
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         items(state.deals.take(4)) { recipe ->
@@ -1279,15 +1279,15 @@ private fun CartScreen(homeViewModel: HomeViewModel, onBack: () -> Unit, onOpenD
                     Spacer(modifier = Modifier.height(12.dp))
                     Card(shape = RoundedCornerShape(18.dp)) {
                         Column(modifier = Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                            SummaryLine("Subtotal", "$${String.format("%.2f", subtotal)}")
-                            SummaryLine("Delivery", "Free")
-                            SummaryLine("Service fee", "$2.50")
+                            SummaryLine("주문 금액", "$${String.format("%.2f", subtotal)}")
+                            SummaryLine("배달비", "무료")
+                            SummaryLine("서비스 이용료", "$2.50")
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                Text("Total", fontWeight = FontWeight.Bold)
+                                Text("총 결제 금액", fontWeight = FontWeight.Bold)
                                 Text("$${String.format("%.2f", subtotal + 2.5)}", fontWeight = FontWeight.Bold, color = PrimaryYellow)
                             }
                             Button(onClick = onCheckout, modifier = Modifier.fillMaxWidth().height(54.dp), colors = ButtonDefaults.buttonColors(containerColor = PrimaryYellow, contentColor = Color.Black), shape = RoundedCornerShape(16.dp)) {
-                                Text("Go to Checkout", fontWeight = FontWeight.Bold)
+                                Text("주문하러 가기", fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -1355,17 +1355,17 @@ private fun CheckoutScreen(onBack: () -> Unit, onPaymentComplete: () -> Unit) {
     var instructions by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Checkout") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
+    Scaffold(topBar = { TopAppBar(title = { Text("주문하기") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
         LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPadding), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             item {
-                SectionHeader("Offer Instructions")
+                SectionHeader("추가 요청 사항")
                 Spacer(modifier = Modifier.height(10.dp))
-                OutlinedTextField(value = instructions, onValueChange = { instructions = it }, modifier = Modifier.fillMaxWidth(), minLines = 3, shape = RoundedCornerShape(18.dp), placeholder = { Text("e.g. It's a birthday dinner outing") }, leadingIcon = { Icon(Icons.Outlined.EditNote, null) })
+                OutlinedTextField(value = instructions, onValueChange = { instructions = it }, modifier = Modifier.fillMaxWidth(), minLines = 3, shape = RoundedCornerShape(18.dp), placeholder = { Text("예: 생일 파티용 음식입니다") }, leadingIcon = { Icon(Icons.Outlined.EditNote, null) })
             }
             item {
                 Card(shape = RoundedCornerShape(22.dp)) {
                     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                        SectionHeader("Payment Method")
+                        SectionHeader("결제 수단")
                         Box(modifier = Modifier.fillMaxWidth().background(Brush.horizontalGradient(listOf(Color(0xFFD8B03C), Color(0xFF7A67FF))), RoundedCornerShape(20.dp)).padding(18.dp)) {
                             Column {
                                 Icon(Icons.Outlined.CreditCard, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
@@ -1375,13 +1375,13 @@ private fun CheckoutScreen(onBack: () -> Unit, onPaymentComplete: () -> Unit) {
                                 Text("•••• 4871", color = Color.White.copy(alpha = 0.88f))
                             }
                         }
-                        SectionHeader("Order Summary")
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("Items (${cart.sumOf { it.quantity }})"); Text("$${String.format("%.2f", subtotal)}") }
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("Service Fee"); Text("$2.50") }
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("Delivery"); Text("Free") }
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("Total", fontWeight = FontWeight.Bold); Text("$${String.format("%.2f", subtotal + 2.5)}", fontWeight = FontWeight.Bold, color = PrimaryYellow) }
+                        SectionHeader("주문 요약")
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("상품 (${cart.sumOf { it.quantity }})"); Text("$${String.format("%.2f", subtotal)}") }
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("서비스 이용료"); Text("$2.50") }
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("배달비"); Text("무료") }
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("총 결제 금액", fontWeight = FontWeight.Bold); Text("$${String.format("%.2f", subtotal + 2.5)}", fontWeight = FontWeight.Bold, color = PrimaryYellow) }
                         Button(onClick = { scope.launch { store.placeOrder(cart, subtotal + 2.5); onPaymentComplete() } }, enabled = cart.isNotEmpty(), modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(18.dp), colors = ButtonDefaults.buttonColors(containerColor = PrimaryYellow, contentColor = Color.Black)) {
-                            Text("Pay Now", fontWeight = FontWeight.Bold)
+                            Text("결제하기", fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -1400,8 +1400,8 @@ private fun OrdersScreen(onBack: () -> Unit, modifier: Modifier = Modifier, inli
             Box(modifier = Modifier.fillMaxSize().padding(contentPadding), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(Icons.Outlined.ReceiptLong, contentDescription = null, modifier = Modifier.size(64.dp), tint = PrimaryYellow)
-                    Text("No orders yet", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                    SmallMetaText("Place your first checkout and your orders will appear here.")
+                    Text("주문 내역이 없습니다", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    SmallMetaText("첫 주문을 완료하면 내역이 여기에 표시됩니다.")
                 }
             }
         } else {
@@ -1414,7 +1414,7 @@ private fun OrdersScreen(onBack: () -> Unit, modifier: Modifier = Modifier, inli
     if (inlineMode) {
         content()
     } else {
-        Scaffold(modifier = modifier, topBar = { TopAppBar(title = { Text("My Orders") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
+        Scaffold(modifier = modifier, topBar = { TopAppBar(title = { Text("내 주문 내역") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
             Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) { content() }
         }
     }
@@ -1427,13 +1427,17 @@ private fun OrderCard(order: LocalOrder) {
             AsyncImage(model = order.thumbnail, contentDescription = null, modifier = Modifier.fillMaxWidth().height(150.dp), contentScale = ContentScale.Crop)
             Text(order.title, fontWeight = FontWeight.Bold)
             SmallMetaText(order.createdAt)
-            SmallMetaText("${order.items.sumOf { it.quantity }} items")
+            SmallMetaText("${order.items.sumOf { it.quantity }}개의 상품")
             Surface(color = when (order.status) {
                 "Completed" -> SuccessGreen.copy(alpha = 0.16f)
                 "Cancelled" -> ErrorRed.copy(alpha = 0.16f)
                 else -> PrimaryYellow.copy(alpha = 0.18f)
             }, shape = RoundedCornerShape(50)) {
-                Text(order.status, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), color = when (order.status) {
+                Text(when(order.status) {
+                    "Completed" -> "완료됨"
+                    "Cancelled" -> "취소됨"
+                    else -> order.status
+                }, modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp), color = when (order.status) {
                     "Completed" -> SuccessGreen
                     "Cancelled" -> ErrorRed
                     else -> Color(0xFFD28A00)
@@ -1455,8 +1459,8 @@ private fun FavoritesScreen(homeViewModel: HomeViewModel, onBack: () -> Unit, on
             Box(modifier = Modifier.fillMaxSize().padding(contentPadding), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(Icons.Outlined.FavoriteBorder, contentDescription = null)
-                    Text("No favorites yet", fontWeight = FontWeight.Bold)
-                    Text("Tap the heart icon on any dish to save it.")
+                    Text("찜한 메뉴가 없습니다", fontWeight = FontWeight.Bold)
+                    Text("메뉴의 하트 아이콘을 눌러 찜해보세요.")
                 }
             }
         } else {
@@ -1469,7 +1473,7 @@ private fun FavoritesScreen(homeViewModel: HomeViewModel, onBack: () -> Unit, on
     if (inlineMode) {
         content()
     } else {
-        Scaffold(modifier = modifier, topBar = { TopAppBar(title = { Text("Wishlist") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
+        Scaffold(modifier = modifier, topBar = { TopAppBar(title = { Text("찜한 목록") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
             Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) { content() }
         }
     }
@@ -1502,22 +1506,22 @@ private fun ProfileScreen(onOpenOrders: () -> Unit, onOpenFavorites: () -> Unit,
         }
         item {
             Column(modifier = Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                SettingsSectionTitle("Account Settings")
-                ProfileRow(Icons.Outlined.FavoriteBorder, "Favorites", onOpenFavorites)
-                ProfileRow(Icons.Outlined.ReceiptLong, "My Orders", onOpenOrders)
-                ProfileRow(Icons.Outlined.CreditCard, "Payment Methods", onOpenPayment)
-                ProfileRow(Icons.Outlined.StarOutline, "My Reviews", onOpenReviews)
-                SettingsSectionTitle("General Settings")
-                ProfileRow(Icons.Outlined.NotificationsNone, "Notifications", onOpenNotifications)
+                SettingsSectionTitle("계정 설정")
+                ProfileRow(Icons.Outlined.FavoriteBorder, "찜한 목록", onOpenFavorites)
+                ProfileRow(Icons.Outlined.ReceiptLong, "내 주문 내역", onOpenOrders)
+                ProfileRow(Icons.Outlined.CreditCard, "결제 수단", onOpenPayment)
+                ProfileRow(Icons.Outlined.StarOutline, "내 리뷰", onOpenReviews)
+                SettingsSectionTitle("일반 설정")
+                ProfileRow(Icons.Outlined.NotificationsNone, "알림", onOpenNotifications)
                 Card(shape = RoundedCornerShape(18.dp)) {
                     Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Outlined.Info, contentDescription = null)
                         Spacer(modifier = Modifier.width(12.dp))
-                        Text("Dark Mode", modifier = Modifier.weight(1f))
+                        Text("다크 모드", modifier = Modifier.weight(1f))
                         Switch(checked = darkMode, onCheckedChange = { enabled -> scope.launch { store.setDarkMode(enabled) } })
                     }
                 }
-                ProfileRow(Icons.Outlined.Logout, "Log out") {
+                ProfileRow(Icons.Outlined.Logout, "로그아웃") {
                     scope.launch { store.clearSession(); onLogout() }
                 }
             }
@@ -1545,13 +1549,13 @@ private fun ProfileRow(icon: androidx.compose.ui.graphics.vector.ImageVector, ti
 @Composable
 private fun NotificationsScreen(onBack: () -> Unit) {
     val notificationItems = listOf(
-        "Your order has been served" to "2m",
-        "Your order is on its way" to "50m",
-        "Your order has been placed" to "1h",
-        "Confirm your phone number" to "5d",
-        "Welcome to Foodies" to "1w",
+        "주문하신 음식이 준비되었습니다" to "2분 전",
+        "음식이 배달 중입니다" to "50분 전",
+        "주문이 성공적으로 접수되었습니다" to "1시간 전",
+        "전화번호를 인증해주세요" to "5일 전",
+        "Foodies에 오신 것을 환영합니다" to "1주일 전",
     )
-    Scaffold(topBar = { TopAppBar(title = { Text("Notifications") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
+    Scaffold(topBar = { TopAppBar(title = { Text("알림") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
         LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPadding), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             items(notificationItems) { item ->
                 Card { Column(modifier = Modifier.padding(16.dp)) { Text(item.first, fontWeight = FontWeight.SemiBold); SmallMetaText(item.second) } }
@@ -1562,21 +1566,21 @@ private fun NotificationsScreen(onBack: () -> Unit) {
 
 @Composable
 private fun PaymentMethodScreen(onBack: () -> Unit) {
-    Scaffold(topBar = { TopAppBar(title = { Text("Payment Method") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
+    Scaffold(topBar = { TopAppBar(title = { Text("결제 수단") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
         Column(modifier = Modifier.fillMaxSize().padding(innerPadding).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Box(modifier = Modifier.fillMaxWidth().background(Brush.horizontalGradient(listOf(Color(0xFF4563D1), Color(0xFFD1B53A))), RoundedCornerShape(22.dp)).padding(20.dp)) {
                 Column {
                     Icon(Icons.Outlined.CreditCard, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
-                    Text("John Doe", color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 18.dp))
+                    Text("홍길동", color = Color.White, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 18.dp))
                     Text("•••• 2459", color = Color.White.copy(alpha = 0.9f))
                 }
             }
-            OutlinedTextField(value = "John Doe", onValueChange = {}, modifier = Modifier.fillMaxWidth(), label = { Text("Card Name") })
-            OutlinedTextField(value = "1234 1234 1234 4871", onValueChange = {}, modifier = Modifier.fillMaxWidth(), label = { Text("Card Number") })
-            OutlinedTextField(value = "02/2027", onValueChange = {}, modifier = Modifier.fillMaxWidth(), label = { Text("Expiry Date") })
+            OutlinedTextField(value = "홍길동", onValueChange = {}, modifier = Modifier.fillMaxWidth(), label = { Text("카드 소유자 이름") })
+            OutlinedTextField(value = "1234 1234 1234 4871", onValueChange = {}, modifier = Modifier.fillMaxWidth(), label = { Text("카드 번호") })
+            OutlinedTextField(value = "02/2027", onValueChange = {}, modifier = Modifier.fillMaxWidth(), label = { Text("만료일") })
             OutlinedTextField(value = "123", onValueChange = {}, modifier = Modifier.fillMaxWidth(), label = { Text("CVC") })
             Button(onClick = {}, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = PrimaryYellow, contentColor = Color.Black), shape = RoundedCornerShape(18.dp)) {
-                Text("Cancel Order", fontWeight = FontWeight.Bold)
+                Text("주문 취소", fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -1586,7 +1590,7 @@ private fun PaymentMethodScreen(onBack: () -> Unit) {
 private fun ProfileReviewsScreen(homeViewModel: HomeViewModel, onBack: () -> Unit) {
     val state by homeViewModel.uiState.collectAsState()
     val items = state.recipes.take(3)
-    Scaffold(topBar = { TopAppBar(title = { Text("My Reviews") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
+    Scaffold(topBar = { TopAppBar(title = { Text("내 리뷰") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.Outlined.ArrowBack, null) } }) }) { innerPadding ->
         LazyColumn(modifier = Modifier.fillMaxSize().padding(innerPadding), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             items(items) { recipe ->
                 Card(shape = RoundedCornerShape(20.dp)) {
@@ -1596,7 +1600,7 @@ private fun ProfileReviewsScreen(homeViewModel: HomeViewModel, onBack: () -> Uni
                         Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
                             repeat(5) { index -> Icon(Icons.Rounded.Star, contentDescription = null, tint = if (index < recipe.rating.toInt()) PrimaryYellow else Color.LightGray) }
                         }
-                        Text("The UI feels polished, the food card layout is clean, and the order flow is easy to follow.", color = Color.Gray)
+                        Text("UI가 매우 깔끔하고 음식 카드 레이아웃이 훌륭합니다. 주문 과정도 따라하기 쉽네요.", color = Color.Gray)
                     }
                 }
             }
@@ -1612,12 +1616,12 @@ private fun OrderSuccessScreen(onGoMenu: () -> Unit) {
                 Icon(Icons.Rounded.Icecream, contentDescription = null, tint = PrimaryYellow, modifier = Modifier.size(118.dp))
             }
             Spacer(modifier = Modifier.height(24.dp))
-            Text("Thank you for placing the order", textAlign = TextAlign.Center, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            Text("주문이 완료되었습니다", textAlign = TextAlign.Center, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
-            Text("We'll get to you as soon as possible", textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("최대한 빨리 준비해 드리겠습니다", textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(modifier = Modifier.height(30.dp))
             Button(onClick = onGoMenu, modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(18.dp), colors = ButtonDefaults.buttonColors(containerColor = PrimaryYellow, contentColor = Color.Black)) {
-                Text("Go Menu", fontWeight = FontWeight.Bold)
+                Text("메뉴로 이동", fontWeight = FontWeight.Bold)
             }
         }
     }

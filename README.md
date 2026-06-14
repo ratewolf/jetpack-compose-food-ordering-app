@@ -1,42 +1,46 @@
-# Foodies Compose
+# Foodies - 패스트푸드 키오스크 시뮬레이션 (화면 안내 서비스 테스트용)
 
-A Jetpack Compose restaurant ordering app inspired by the provided Food Ordering System Figma kit and powered by the live DummyJSON Recipes API.
+이 프로젝트는 [Foodies Compose](https://github.com/osamahost/jetpack-compose-food-ordering-app) 프로젝트를 포크하여 수정된 버전입니다. 
+안드로이드 환경에서 패스트푸드 매장의 키오스크 화면을 모사하고, 자체 개발 중인 **'자동 화면 안내 서비스'**의 성능과 사용자 경험을 테스트하기 위한 목적으로 제작되었습니다.
 
-## Features
+## 🎯 프로젝트 목적
 
-- Splash screen
-- Fake login and signup with local session
-- Home / menu dashboard
-- Search and tag filtering
-- Product detail with quantity, size, extras, and notes
-- Favorites
-- Cart
-- Checkout
-- Order success screen
-- Local order history
-- Profile, notifications, payment method, and reviews screens
-- DataStore persistence for session, favorites, cart, orders, and dark mode
+- **자동 화면 안내 서비스 테스트**: 시각 장애인이나 키오스크 사용에 어려움을 겪는 사용자를 위한 자동 음성/화면 안내 서비스의 프로토타입 테스트 베드로 활용.
+- **키오스크 UX 모사**: 실제 매장 키오스크와 유사한 주문 흐름(메뉴 선택 -> 옵션 조절 -> 장바구니 -> 결제)을 구현하여 실감 나는 테스트 환경 구축.
 
-## Demo Login
+## ✨ 주요 특징 및 변경 사항
 
-- Email: `demo@foodies.app`
-- Password: `1234`
+- **한국어 로컬라이징**: 기존 영어 UI를 한국어로 전면 번역하여 국내 키오스크 환경에 맞게 최적화.
+- **Jetpack Compose 기반**: 현대적인 선언형 UI 프레임워크를 사용하여 유연한 UI 수정 및 테스트 가능.
+- **주요 기능**:
+  - 스플래시 화면 및 세션 유지 기능
+  - 메뉴 검색 및 태그 필터링
+  - 상세 옵션 선택 (사이즈, 소스 추가, 요청 사항 입력 등)
+  - 장바구니 및 가상 결제 시스템
+  - 주문 내역 확인 및 프로필 관리
+  - 다크 모드 지원
 
-## API
+## 🚀 향후 진행 계획
 
-- Base URL: `https://dummyjson.com/`
-- Docs: `https://dummyjson.com/docs/recipes`
+1.  **키오스크 전용 UI 최적화**: 대화면 키오스크에 적합한 버튼 크기 및 레이아웃 조정.
+2.  **화면 안내 서비스 통합**: 개발 중인 안내 서비스 로직을 앱의 각 컴포넌트와 결합하여 테스트 진행.
+3.  **다양한 결제 시나리오 추가**: 테스트를 위한 다양한 가상 결제 실패/성공 시나리오 구현.
 
-## Screenshots
+## 🔑 데모 로그인 정보
 
-### Splash Screen
-![Splash Screen](assets/img_1.jpg)
+- **이메일**: `demo@foodies.app`
+- **비밀번호**: `1234`
 
-### App Logo / Loading Screen
-![Loading Screen](assets/img_2.jpg)
+## ⚠️ 라이선스 및 고지 사항
 
-### Home / Menu Screen
-![Home Screen](assets/img_3.jpg)
+- 이 프로젝트는 원본 프로젝트의 소스 코드를 바탕으로 수정되었습니다.
+- **상업적 목적으로 사용하지 않으며**, 학술적 연구 및 프로젝트 발표를 위한 테스트 목적으로만 활용됩니다.
+- 원본 프로젝트 제작자에게 감사의 뜻을 전합니다. (Inspired by [osamahost](https://github.com/osamahost))
 
-### Profile Screen
-![Profile Screen](assets/img_4.jpg)
+---
+
+## 원본 프로젝트 정보 (Original Project)
+
+- **Name**: Foodies Compose
+- **Tech**: Jetpack Compose, ViewModel, Flow, DataStore, Retrofit
+- **API**: [DummyJSON Recipes API](https://dummyjson.com/docs/recipes)
