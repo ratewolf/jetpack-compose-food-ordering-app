@@ -33,6 +33,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.CreditCard
@@ -153,11 +158,11 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.ui.tooling.preview.Preview
 
-private val PrimaryYellow = Color(0xFFF5C400)
-private val WarmOrange = Color(0xFFFFA726)
-private val SuccessGreen = Color(0xFF35C76E)
-private val ErrorRed = Color(0xFFFF6B6B)
-private val AppBackground = Color(0xFFF5F5F5)
+private val PrimaryYellow = Color(0xFF6F4E37) // Coffee Brown
+private val WarmOrange = Color(0xFFD2B48C) // Tan/Cream
+private val SuccessGreen = Color(0xFF4C7B5D) // Forest Green
+private val ErrorRed = Color(0xFFB22222) // Dark Red
+private val AppBackground = Color(0xFFFAF9F6) // Off White
 private val DarkBackground = Color(0xFF141414)
 private val DarkSurface = Color(0xFF1E1E1E)
 private val DarkCard = Color(0xFF262626)
@@ -191,6 +196,7 @@ private val DarkColors = darkColorScheme(
 data class Recipe(
     val id: Int,
     val name: String,
+    val price: Double = 0.0, // 직접 입력 가격 추가
     val ingredients: List<String> = emptyList(),
     val instructions: List<String> = emptyList(),
     val prepTimeMinutes: Int = 0,
@@ -210,10 +216,7 @@ data class Recipe(
         get() = prepTimeMinutes + cookTimeMinutes
 
     val displayPrice: Double
-        get() {
-            val computed = 6 + (caloriesPerServing / 55.0) + (rating * 1.8) + (servings * 0.4)
-            return (computed * 100).roundToInt() / 100.0
-        }
+        get() = price // 입력된 가격을 그대로 사용하도록 수정
 
     val subtitle: String
         get() = listOf(cuisine, difficulty, mealType.firstOrNull()).filterNotNull().filter { it.isNotBlank() }.joinToString(" • ")
@@ -281,33 +284,91 @@ interface RecipeApi {
 }
 
 class FoodRepository {
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+    private val CAFE_TAGS = listOf("전체", "커피", "논커피", "디저트", "베이커리")
+    
+    private val CAFE_ITEMS = listOf(
+        Recipe(
+            id = 1, name = "아메리카노", price = 3.5, ingredients = listOf("에스프레소", "물"), instructions = emptyList(),
+            prepTimeMinutes = 2, cookTimeMinutes = 0, servings = 1, difficulty = "Easy", cuisine = "Cafe",
+            caloriesPerServing = 5, tags = listOf("커피"), userId = 1,
+            image = "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=500&auto=format&fit=crop",
+            rating = 4.8, reviewCount = 120, mealType = listOf("Drink")
+        ),
+        Recipe(
+            id = 2, name = "카페라떼", price = 4.5, ingredients = listOf("에스프레소", "우유"), instructions = emptyList(),
+            prepTimeMinutes = 3, cookTimeMinutes = 0, servings = 1, difficulty = "Easy", cuisine = "Cafe",
+            caloriesPerServing = 150, tags = listOf("커피"), userId = 1,
+            image = "https://images.unsplash.com/photo-1541167760496-162955ed8a9f?q=80&w=500&auto=format&fit=crop",
+            rating = 4.7, reviewCount = 85, mealType = listOf("Drink")
+        ),
+        Recipe(
+            id = 3, name = "바닐라 라떼", price = 5.0, ingredients = listOf("에스프레소", "우유", "바닐라 시럽"), instructions = emptyList(),
+            prepTimeMinutes = 3, cookTimeMinutes = 0, servings = 1, difficulty = "Easy", cuisine = "Cafe",
+            caloriesPerServing = 220, tags = listOf("커피"), userId = 1,
+            image = "https://images.unsplash.com/photo-1595434066389-49c089ea3acd?q=80&w=500&auto=format&fit=crop",
+            rating = 4.9, reviewCount = 200, mealType = listOf("Drink")
+        ),
+        Recipe(
+            id = 4, name = "딸기 라떼", price = 5.5, ingredients = listOf("딸기 청", "우유"), instructions = emptyList(),
+            prepTimeMinutes = 3, cookTimeMinutes = 0, servings = 1, difficulty = "Easy", cuisine = "Cafe",
+            caloriesPerServing = 280, tags = listOf("논커피"), userId = 1,
+            image = "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=500&auto=format&fit=crop",
+            rating = 4.6, reviewCount = 60, mealType = listOf("Drink")
+        ),
+        Recipe(
+            id = 5, name = "초코 케이크", price = 6.0, ingredients = listOf("초콜릿", "밀가루", "생크림"), instructions = emptyList(),
+            prepTimeMinutes = 5, cookTimeMinutes = 40, servings = 1, difficulty = "Medium", cuisine = "Cafe",
+            caloriesPerServing = 450, tags = listOf("디저트"), userId = 1,
+            image = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=500&auto=format&fit=crop",
+            rating = 4.9, reviewCount = 150, mealType = listOf("Dessert")
+        ),
+        Recipe(
+            id = 6, name = "치즈 케이크", price = 6.0, ingredients = listOf("크림치즈", "설탕", "계란"), instructions = emptyList(),
+            prepTimeMinutes = 10, cookTimeMinutes = 60, servings = 1, difficulty = "Medium", cuisine = "Cafe",
+            caloriesPerServing = 400, tags = listOf("디저트"), userId = 1,
+            image = "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?q=80&w=500&auto=format&fit=crop",
+            rating = 4.7, reviewCount = 95, mealType = listOf("Dessert")
+        ),
+        Recipe(
+            id = 7, name = "크로플", price = 5.0, ingredients = listOf("크로와상 생지", "메이플 시럽"), instructions = emptyList(),
+            prepTimeMinutes = 5, cookTimeMinutes = 5, servings = 1, difficulty = "Easy", cuisine = "Cafe",
+            caloriesPerServing = 350, tags = listOf("베이커리"), userId = 1,
+            image = "https://images.unsplash.com/photo-1550617931-e17a7b70dce2?q=80&w=500&auto=format&fit=crop",
+            rating = 4.8, reviewCount = 110, mealType = listOf("Bakery")
+        ),
+        Recipe(
+            id = 8, name = "말차 라떼", price = 5.0, ingredients = listOf("말차 가루", "우유"), instructions = emptyList(),
+            prepTimeMinutes = 3, cookTimeMinutes = 0, servings = 1, difficulty = "Easy", cuisine = "Cafe",
+            caloriesPerServing = 180, tags = listOf("논커피"), userId = 1,
+            image = "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?q=80&w=500&auto=format&fit=crop",
+            rating = 4.5, reviewCount = 40, mealType = listOf("Drink")
+        )
+    )
+
+    suspend fun getRecipes(limit: Int = 24, skip: Int = 0, sortBy: String = "rating", order: String = "desc"): List<Recipe> {
+        delay(500)
+        return CAFE_ITEMS
     }
 
-    private val api: RecipeApi by lazy {
-        val client = OkHttpClient.Builder()
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
-            .writeTimeout(20, TimeUnit.SECONDS)
-            .addInterceptor(loggingInterceptor)
-            .build()
-
-        Retrofit.Builder()
-            .baseUrl("https://dummyjson.com/")
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(RecipeApi::class.java)
+    suspend fun searchRecipes(query: String): List<Recipe> {
+        delay(300)
+        return if (query.isBlank()) emptyList() else CAFE_ITEMS.filter { it.name.contains(query, ignoreCase = true) }
     }
 
-    suspend fun getRecipes(limit: Int = 24, skip: Int = 0, sortBy: String = "rating", order: String = "desc"): List<Recipe> =
-        api.getRecipes(limit = limit, skip = skip, sortBy = sortBy, order = order).recipes
+    suspend fun getTags(): List<String> {
+        delay(300)
+        return CAFE_TAGS
+    }
 
-    suspend fun searchRecipes(query: String): List<Recipe> = if (query.isBlank()) emptyList() else api.searchRecipes(query).recipes
-    suspend fun getTags(): List<String> = api.getTags()
-    suspend fun getRecipesByTag(tag: String): List<Recipe> = api.getRecipesByTag(tag).recipes
-    suspend fun getRecipe(id: Int): Recipe = api.getRecipe(id)
+    suspend fun getRecipesByTag(tag: String): List<Recipe> {
+        delay(300)
+        return if (tag == "전체") CAFE_ITEMS else CAFE_ITEMS.filter { it.tags.contains(tag) }
+    }
+
+    suspend fun getRecipe(id: Int): Recipe {
+        delay(200)
+        return CAFE_ITEMS.first { it.id == id }
+    }
 }
 
 class LocalStore(context: android.content.Context) {
@@ -440,7 +501,7 @@ data class HomeUiState(
     val isRefreshing: Boolean = false,
     val errorMessage: String? = null,
     val query: String = "",
-    val selectedTag: String = "All",
+    val selectedTag: String = "전체",
     val tags: List<String> = emptyList(),
     val recipes: List<Recipe> = emptyList(),
     val featuredRecipes: List<Recipe> = emptyList(),
@@ -464,8 +525,8 @@ class HomeViewModel(private val repository: FoodRepository) : ViewModel() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = masterList.isEmpty(), isRefreshing = masterList.isNotEmpty(), errorMessage = null) }
             runCatching {
-                val recipes = repository.getRecipes(limit = 24, sortBy = "rating", order = "desc")
-                val tags = repository.getTags().take(8)
+                val recipes = repository.getRecipes()
+                val tags = repository.getTags()
                 masterList = recipes
                 recipes.forEach { cachedDetails[it.id] = it }
                 _uiState.update {
@@ -473,17 +534,17 @@ class HomeViewModel(private val repository: FoodRepository) : ViewModel() {
                         isLoading = false,
                         isRefreshing = false,
                         errorMessage = null,
-                        tags = listOf("All") + tags,
+                        tags = tags,
                         recipes = recipes,
                         featuredRecipes = recipes.take(3),
                         deals = recipes.drop(3).take(6),
                         exploreMore = recipes.drop(9),
-                        selectedTag = if (it.selectedTag.isBlank()) "All" else it.selectedTag,
+                        selectedTag = if (it.selectedTag.isBlank()) "전체" else it.selectedTag,
                     )
                 }
             }.onFailure { throwable ->
                 _uiState.update {
-                    it.copy(isLoading = false, isRefreshing = false, errorMessage = throwable.message ?: "Could not load menu data.")
+                    it.copy(isLoading = false, isRefreshing = false, errorMessage = throwable.message ?: "메뉴 데이터를 불러올 수 없습니다.")
                 }
             }
         }
@@ -495,7 +556,7 @@ class HomeViewModel(private val repository: FoodRepository) : ViewModel() {
         searchJob = viewModelScope.launch {
             delay(300)
             if (query.isBlank()) {
-                if (_uiState.value.selectedTag == "All") {
+                if (_uiState.value.selectedTag == "전체") {
                     _uiState.update { it.copy(recipes = masterList, errorMessage = null) }
                 } else {
                     onTagSelected(_uiState.value.selectedTag)
@@ -505,48 +566,36 @@ class HomeViewModel(private val repository: FoodRepository) : ViewModel() {
             _uiState.update { it.copy(isRefreshing = true, errorMessage = null) }
             runCatching { repository.searchRecipes(query.trim()) }
                 .onSuccess { results ->
-                    results.forEach { cachedDetails[it.id] = it }
                     _uiState.update {
                         it.copy(
                             isRefreshing = false,
                             recipes = results,
-                            featuredRecipes = results.take(3),
-                            deals = results.drop(3).take(6),
-                            exploreMore = results.drop(9),
-                            errorMessage = if (results.isEmpty()) "No menu items matched your search." else null,
+                            errorMessage = if (results.isEmpty()) "검색 결과가 없습니다." else null,
                         )
                     }
                 }
                 .onFailure { throwable ->
-                    _uiState.update { it.copy(isRefreshing = false, errorMessage = throwable.message ?: "Search failed.") }
+                    _uiState.update { it.copy(isRefreshing = false, errorMessage = throwable.message ?: "검색 실패") }
                 }
         }
     }
 
     fun onTagSelected(tag: String) {
-        _uiState.update { it.copy(selectedTag = tag, query = if (tag == "All") it.query else "") }
-        if (tag == "All") {
-            _uiState.update { it.copy(recipes = masterList, featuredRecipes = masterList.take(3), deals = masterList.drop(3).take(6), exploreMore = masterList.drop(9), errorMessage = null) }
-            return
-        }
+        _uiState.update { it.copy(selectedTag = tag, query = if (tag == "전체") it.query else "") }
         viewModelScope.launch {
             _uiState.update { it.copy(isRefreshing = true, errorMessage = null) }
-            runCatching { repository.getRecipesByTag(tag) }
+            runCatching { if (tag == "전체") repository.getRecipes() else repository.getRecipesByTag(tag) }
                 .onSuccess { results ->
-                    results.forEach { cachedDetails[it.id] = it }
                     _uiState.update {
                         it.copy(
                             isRefreshing = false,
                             recipes = results,
-                            featuredRecipes = results.take(3),
-                            deals = results.drop(3).take(6),
-                            exploreMore = results.drop(9),
-                            errorMessage = if (results.isEmpty()) "No items were found for $tag." else null,
+                            errorMessage = if (results.isEmpty()) "$tag 항목이 없습니다." else null,
                         )
                     }
                 }
                 .onFailure { throwable ->
-                    _uiState.update { it.copy(isRefreshing = false, errorMessage = throwable.message ?: "Could not filter menu.") }
+                    _uiState.update { it.copy(isRefreshing = false, errorMessage = throwable.message ?: "필터링 실패") }
                 }
         }
     }
@@ -839,7 +888,7 @@ private fun AuthHero() {
     }
 }
 
-private enum class MainTab { Menu, Orders, Favorites, Profile }
+private enum class MainTab { Menu, Orders }
 
 @Composable
 private fun MainShell(
@@ -857,7 +906,7 @@ private fun MainShell(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
-            if (currentTab == MainTab.Menu || currentTab == MainTab.Favorites) {
+            if (currentTab == MainTab.Menu) {
                 FloatingActionButton(onClick = onOpenCart, containerColor = PrimaryYellow, contentColor = Color.Black) {
                     Icon(Icons.Rounded.ShoppingCart, contentDescription = null)
                 }
@@ -867,16 +916,12 @@ private fun MainShell(
             NavigationBar {
                 NavigationBarItem(selected = currentTab == MainTab.Menu, onClick = { currentTab = MainTab.Menu }, icon = { Icon(Icons.Outlined.RestaurantMenu, null) }, label = { Text("메뉴") })
                 NavigationBarItem(selected = currentTab == MainTab.Orders, onClick = { currentTab = MainTab.Orders }, icon = { Icon(Icons.Outlined.ReceiptLong, null) }, label = { Text("주문") })
-                NavigationBarItem(selected = currentTab == MainTab.Favorites, onClick = { currentTab = MainTab.Favorites }, icon = { Icon(Icons.Outlined.FavoriteBorder, null) }, label = { Text("찜") })
-                NavigationBarItem(selected = currentTab == MainTab.Profile, onClick = { currentTab = MainTab.Profile }, icon = { Icon(Icons.Outlined.PersonOutline, null) }, label = { Text("프로필") })
             }
         },
     ) { innerPadding ->
         when (currentTab) {
             MainTab.Menu -> MenuScreen(homeViewModel, onOpenDetail, Modifier.fillMaxSize(), innerPadding)
             MainTab.Orders -> OrdersScreen({}, Modifier.fillMaxSize(), true, innerPadding)
-            MainTab.Favorites -> FavoritesScreen(homeViewModel, {}, onOpenDetail, Modifier.fillMaxSize(), true, innerPadding)
-            MainTab.Profile -> ProfileScreen(onOpenOrders, onOpenFavorites, onOpenNotifications, onOpenPayment, onOpenReviews, onLogout, Modifier.fillMaxSize(), innerPadding)
         }
     }
 }
@@ -888,72 +933,128 @@ private fun MenuScreen(homeViewModel: HomeViewModel, onOpenDetail: (Int) -> Unit
     val favoriteIds by store.favoriteIdsFlow.collectAsState(initial = emptySet())
     val scope = rememberCoroutineScope()
 
-    LazyColumn(modifier = modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 110.dp)) {
-        item {
+    Column(modifier = modifier.fillMaxSize().padding(contentPadding)) {
+        // Header
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(PrimaryYellow)
+                .statusBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("CAFE KIOSK", color = Color.White, fontWeight = FontWeight.Black, fontSize = 24.sp)
+            Spacer(modifier = Modifier.width(16.dp))
+            FoodiesSearchField(
+                value = uiState.query,
+                onValueChange = homeViewModel::onQueryChanged,
+                placeholder = "메뉴 검색...",
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Row(modifier = Modifier.fillMaxSize()) {
+            // Sidebar
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(PrimaryYellow)
-                    .statusBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                    .width(120.dp)
+                    .fillMaxHeight()
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f))
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Outlined.RestaurantMenu, contentDescription = null, tint = Color.White)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Foodies", color = Color.White, fontWeight = FontWeight.Bold)
+                uiState.tags.forEach { tag ->
+                    val isSelected = tag == uiState.selectedTag
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
+                            .clickable { homeViewModel.onTagSelected(tag) }
+                            .background(if (isSelected) Color.White else Color.Transparent),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = when(tag) {
+                                    "커피" -> Icons.Outlined.RestaurantMenu
+                                    "디저트" -> Icons.Rounded.Icecream
+                                    "베이커리" -> Icons.Rounded.Restaurant
+                                    else -> Icons.Outlined.RestaurantMenu
+                                },
+                                contentDescription = null,
+                                tint = if (isSelected) PrimaryYellow else Color.Gray,
+                                modifier = Modifier.size(32.dp)
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                tag,
+                                fontSize = 14.sp,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                color = if (isSelected) Color.Black else Color.Gray
+                            )
+                        }
+                        if (isSelected) {
+                            Box(modifier = Modifier.align(Alignment.CenterStart).fillMaxHeight(0.7f).width(6.dp).background(PrimaryYellow, RoundedCornerShape(topEnd = 6.dp, bottomEnd = 6.dp)))
+                        }
+                    }
                 }
-                Spacer(modifier = Modifier.height(14.dp))
-                FoodiesSearchField(value = uiState.query, onValueChange = homeViewModel::onQueryChanged, placeholder = "검색...")
+            }
+
+            // Main Content Grid
+            if (uiState.isLoading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(color = PrimaryYellow)
+                }
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(uiState.recipes) { recipe ->
+                        KioskItemCard(recipe, favoriteIds.contains(recipe.id), { scope.launch { store.toggleFavorite(recipe.id) } }, { onOpenDetail(recipe.id) })
+                    }
+                }
             }
         }
-        item {
-            if (uiState.isLoading) {
-                Box(modifier = Modifier.fillMaxWidth().padding(top = 48.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator(color = PrimaryYellow) }
-            } else {
-                Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)) {
-                    uiState.errorMessage?.let {
-                        ErrorMessageCard(it, onRetry = homeViewModel::refreshHome)
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                    Row(modifier = Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        uiState.tags.forEach { tag ->
-                            TagPill(text = if (tag == "All") "전체" else tag, selected = tag == uiState.selectedTag) { homeViewModel.onTagSelected(tag) }
-                            Spacer(modifier = Modifier.width(8.dp))
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(20.dp))
-                    if (uiState.query.isBlank() && uiState.selectedTag == "All") {
-                        SectionHeader("인기 급상승")
-                        Spacer(modifier = Modifier.height(14.dp))
-                        FeaturedGrid(uiState.featuredRecipes, onOpenDetail)
-                        Spacer(modifier = Modifier.height(22.dp))
-                        PromoCard(uiState.deals.firstOrNull(), onOpenDetail)
-                        Spacer(modifier = Modifier.height(24.dp))
-                        SectionHeader("오늘의 할인")
-                        Spacer(modifier = Modifier.height(14.dp))
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            items(uiState.deals) { recipe ->
-                                DealCard(recipe, favoriteIds.contains(recipe.id), { scope.launch { store.toggleFavorite(recipe.id) } }, { onOpenDetail(recipe.id) })
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(24.dp))
-                        SectionHeader("더 보기")
-                        Spacer(modifier = Modifier.height(14.dp))
-                        Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                            uiState.exploreMore.forEach { recipe ->
-                                ExploreCard(recipe, favoriteIds.contains(recipe.id), { scope.launch { store.toggleFavorite(recipe.id) } }, { onOpenDetail(recipe.id) })
-                            }
-                        }
-                    } else {
-                        SectionHeader(if (uiState.query.isBlank()) (if (uiState.selectedTag == "All") "전체" else uiState.selectedTag) else "검색 결과")
-                        Spacer(modifier = Modifier.height(14.dp))
-                        Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                            uiState.recipes.forEach { recipe ->
-                                ExploreCard(recipe, favoriteIds.contains(recipe.id), { scope.launch { store.toggleFavorite(recipe.id) } }, { onOpenDetail(recipe.id) })
-                            }
-                        }
-                    }
+    }
+}
+
+@Composable
+private fun KioskItemCard(recipe: Recipe, isFavorite: Boolean, onToggleFavorite: () -> Unit, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column {
+            Box {
+                AsyncImage(
+                    model = recipe.image,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
+                    contentScale = ContentScale.Crop
+                )
+                IconButton(
+                    onClick = onToggleFavorite,
+                    modifier = Modifier.align(Alignment.TopEnd).padding(4.dp)
+                ) {
+                    Icon(
+                        if (isFavorite) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = null,
+                        tint = if (isFavorite) PrimaryYellow else Color.White
+                    )
                 }
+            }
+            Column(modifier = Modifier.padding(10.dp)) {
+                Text(recipe.name, fontWeight = FontWeight.Bold, maxLines = 1, fontSize = 15.sp)
+                Text("${String.format("%.0f", recipe.displayPrice * 1000)}원", color = PrimaryYellow, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
             }
         }
     }
